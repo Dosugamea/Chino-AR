@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+    <head>
+        <title>AR.js marker based test</title>
+        <!-- Thx to https://github.com/jeromeetienne/AR.js/issues/369#issuecomment-399381175 -->
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <!-- These scripts are latest on 2021/03/01. -->
+        <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+    </head>
+    <body style="margin: 0; overflow: hidden;">
+        <!--
+        logarithmicDepthBuffer: true is required if your model blinks too much.
+        -->
+        <a-scene
+            vr-mode-ui="enabled: false;"
+            arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+            id="scene"
+            renderer="logarithmicDepthBuffer: true"
+            embedded
+            gesture-detector
+        >
+            <!--
+            If your model is too big, it timeouts.
+            This param specify timeout to 500 seconds.
+            -->
+            <a-assets timeout="50000">
+              <!--
+              You need to provide the model yourself.
+              Just export with blender if you already have.
+              -->
+              <a-asset-item id="chino" src="magical-chino.gltf"></a-asset-item>
+            </a-assets>
+            <!--
+            You need to provide the pattern yourself.
+            You can generate the pattern at below.
+            https://jeromeetienne.github.io/AR.js/three.js/examples/marker-training/examples/generator.html
+            -->
+            <a-marker
+                preset="custom"
+                type="pattern"
+                url="marker.patt"
+            >
+                 <!--
+                 Plz concider to scale down!
+                 If you ignore this comment, you may take long time to fix your issue!
+                 -->
+                 <a-entity
+                   gltf-model="#chino"
+                   scale="0.025 0.025 0.025"
+                   rotation="0 0 0"
+                   position="0 0.5 0"
+                   gesture-handler
+                   >
+                 </a-entity>
+            </a-marker>
+            <a-entity camera></a-entity>
+        </a-scene>
+    </body>
+</html>
